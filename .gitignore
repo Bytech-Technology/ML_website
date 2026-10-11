@@ -1,6 +1,9 @@
 # Vercel
 .vercel/
 
+# Build estático
+dist/
+
 # Sistema / editor
 Thumbs.db
 .DS_Store

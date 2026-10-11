@@ -3,30 +3,49 @@
 Landing page de una sola página para **ML Obras** (Marcelo Lezcano), empresa de
 construcción, reformas, instalaciones y mantenimiento en Chascomús, Buenos Aires.
 
-Sitio estático: **HTML + CSS + JavaScript vanilla**, sin dependencias ni build.
+Sitio estático con **build mínimo**: HTML + CSS + JavaScript vanilla, sin
+dependencias. Un pequeño script Node genera la carpeta `dist/` reemplazando el
+dominio en `canonical`, `og:*`, JSON-LD, `robots.txt` y `sitemap.xml`.
+
+## Cambiar el dominio (un solo lugar)
+
+Editá `config.json`:
+
+```json
+{
+  "siteUrl": "https://ml-obras.vercel.app"
+}
+```
+
+y pusheá. Al deployar, `scripts/build.js` regenera todo con ese dominio.
+Los archivos fuente usan el token `__SITE_URL__`; no hay que tocarlos.
 
 ## Estructura
 
 ```
 .
-├─ index.html            # Estructura y contenido
+├─ index.html            # Estructura y contenido (usa token __SITE_URL__)
+├─ config.json           # Única fuente del dominio (siteUrl)
+├─ scripts/build.js      # Genera dist/ con __SITE_URL__ → siteUrl
 ├─ css/styles.css        # Design system y estilos responsive
 ├─ js/i18n.js            # Diccionario ES/EN + toggle de idioma
 ├─ js/main.js            # Nav, reveal, portafolio, FAQ, lightbox, form→WhatsApp
 ├─ assets/img/           # logo.svg, favicon.svg
 ├─ robots.txt
-└─ sitemap.xml
+├─ sitemap.xml
+└─ vercel.json           # buildCommand + outputDirectory + cache headers
 ```
 
 ## Cómo verlo localmente
 
-Abrí `index.html` en el navegador, o levantá un servidor local:
+Para ver el sitio con el dominio ya reemplazado, generá el build y servilo:
 
 ```powershell
+node scripts/build.js
 python -m http.server 8000
 ```
 
-Luego ingresá a <http://localhost:8000>.
+Luego ingresá a <http://localhost:8000> (Vercel sirve la carpeta `dist/`).
 
 ## Editar contenido
 
@@ -53,15 +72,19 @@ CSS semánticas en `css/styles.css` (`:root` y `[data-theme="dark"]`).
 
 ## Deploy
 
-Hosting de referencia: **Vercel** (incluye `vercel.json` con cache headers y
-`cleanUrls`). Es igual de compatible con Netlify, Cloudflare Pages o GitHub Pages.
-Dominio sugerido: `mlobras.com.ar`.
+Hosting: **Vercel** → <https://ml-obras.vercel.app> (repo
+`Bytech-Technology/ML_website`, rama `main`). Cada push regenera el deploy
+automáticamente (`vercel.json` define el build y el output `dist/`).
 
 ```powershell
-npx vercel
+node scripts/build.js   # verificar localmente el build
+git push                # depliega
 ```
 
-Lighthouse: `robots.txt`, compressión y cache no se verifican bien contra
+Cuando tengas dominio propio (`mlobras.com.ar`), editá `config.json` y volvé a
+pushear; se actualiza canónico, `og:*`, JSON-LD, `robots.txt` y `sitemap.xml`.
+
+Lighthouse: `robots.txt`, compresión y cache no se verifican bien contra
 `file://` o `python -m http.server`; corré el audit contra el deploy en Vercel.
 
 ## Pendientes recomendados

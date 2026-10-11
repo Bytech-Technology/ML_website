@@ -1,0 +1,9 @@
+# Vercel
+.vercel/
+
+# Sistema / editor
+Thumbs.db
+.DS_Store
+*.log
+.idea/
+.vscode/

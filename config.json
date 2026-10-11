@@ -1,3 +1,10 @@
 {
-  "siteUrl": "https://ml-obras.vercel.app"
+  "siteUrl": "https://ml-obras.vercel.app",
+  "social": {
+    "facebook": "",
+    "instagram": ""
+  },
+  "stats": {
+    "projects": 400
+  }
 }

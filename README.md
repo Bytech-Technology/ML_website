@@ -7,34 +7,65 @@ Sitio estático con **build mínimo**: HTML + CSS + JavaScript vanilla, sin
 dependencias. Un pequeño script Node genera la carpeta `dist/` reemplazando el
 dominio en `canonical`, `og:*`, JSON-LD, `robots.txt` y `sitemap.xml`.
 
-## Cambiar el dominio (un solo lugar)
+## Cambiar el dominio y datos (un solo lugar)
 
 Editá `config.json`:
 
 ```json
 {
-  "siteUrl": "https://ml-obras.vercel.app"
+  "siteUrl": "https://ml-obras.vercel.app",
+  "social": { "facebook": "", "instagram": "" },
+  "stats": { "projects": 400 }
 }
 ```
 
-y pusheá. Al deployar, `scripts/build.js` regenera todo con ese dominio.
-Los archivos fuente usan el token `__SITE_URL__`; no hay que tocarlos.
+- `siteUrl` → dominio (canonical, `og:*`, JSON-LD, `robots.txt`, `sitemap.xml`).
+- `social` → URLs de Facebook/Instagram (si quedan vacías, los íconos no se muestran).
+- `stats.projects` → número que anima el contador del hero.
+
+Los archivos fuente usan tokens (`__SITE_URL__`, `__FB_URL__`, `__IG_URL__`,
+`__STATS_PROJECTS__`); no hay que tocarlos. Al deployar, `scripts/build.js`
+regenera todo con esos valores.
+
+## Fotos de obras (WebP optimizado)
+
+1. Poné las fotos originales en `assets/img/obras/` (ej. `bath-01.jpg`).
+2. Corré una vez (local, con `npm install` la primera vez):
+
+```powershell
+npm run optimize
+```
+
+Genera `bath-01.webp` (full ~1600px) y `bath-01@thumb.webp` (~640px) listos
+para `srcset`. Luego referencialas en los items del portafolio de `index.html`.
+Este script es de desarrollo: `sharp` no se instala en el build de Vercel.
 
 ## Estructura
 
 ```
 .
-├─ index.html            # Estructura y contenido (usa token __SITE_URL__)
-├─ config.json           # Única fuente del dominio (siteUrl)
-├─ scripts/build.js      # Genera dist/ con __SITE_URL__ → siteUrl
+├─ index.html            # Estructura y contenido (tokens __SITE_URL__ y demás)
+├─ config.json           # Única fuente: dominio, redes sociales, contador de obras
+├─ scripts/build.js      # Genera dist/ reemplazando tokens + copia estáticos
+├─ scripts/optimize.js   # (dev) Convierte fotos de obras/ a WebP en 2 tamaños
 ├─ css/styles.css        # Design system y estilos responsive
 ├─ js/i18n.js            # Diccionario ES/EN + toggle de idioma
-├─ js/main.js            # Nav, reveal, portafolio, FAQ, lightbox, form→WhatsApp
-├─ assets/img/           # logo.svg, favicon.svg
+├─ js/main.js            # Nav, reveal, portafolio, FAQ, lightbox, carrusel, count-up, form→WhatsApp
+├─ assets/img/           # logo.svg, favicon.svg, obras/
 ├─ robots.txt
 ├─ sitemap.xml
-└─ vercel.json           # buildCommand + outputDirectory + cache headers
+└─ vercel.json           # buildCommand + outputDirectory + installCommand + cache headers
 ```
+
+## Funcionalidades
+
+- Toggle **ES/EN** persistente y **tema claro/oscuro** (sigue al sistema).
+- Hero con **slider de fondo**, **count-up** en estadísticas y **CTA móvil fija**.
+- **Cómo trabajamos** (4 pasos), portafolio filtrable con **lightbox + CTA a WhatsApp**.
+- **Carrusel de testimonios** (autoplay con pausa al hover).
+- Contacto por **WhatsApp** (botones + form que arma el mensaje).
+- **Barra de progreso** de scroll y botón **volver arriba**.
+- Redes sociales (Facebook/Instagram) configurables desde `config.json`.
 
 ## Cómo verlo localmente
 

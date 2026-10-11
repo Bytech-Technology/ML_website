@@ -1,0 +1,13 @@
+{
+  "name": "ml-obras",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Sitio estático de ML Obras. Optimización de imágenes de desarrollo (no se ejecuta en el build de Vercel).",
+  "scripts": {
+    "build": "node scripts/build.js",
+    "optimize": "node scripts/optimize.js"
+  },
+  "devDependencies": {
+    "sharp": "^0.33.4"
+  }
+}

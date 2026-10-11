@@ -4,6 +4,9 @@
 # Build estático
 dist/
 
+# Node (solo dev)
+node_modules/
+
 # Sistema / editor
 Thumbs.db
 .DS_Store

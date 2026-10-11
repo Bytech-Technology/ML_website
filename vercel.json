@@ -1,4 +1,5 @@
 {
+  "installCommand": "echo \"Sin dependencias de produccion\"",
   "buildCommand": "node scripts/build.js",
   "outputDirectory": "dist",
   "cleanUrls": true,
